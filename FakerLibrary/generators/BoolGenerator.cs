@@ -1,4 +1,4 @@
-﻿namespace FakerLibrary.generators;
+﻿namespace FakerLibrary.Generators;
 public class BoolGenerator : IGenerator
 {
     public object Generate(Type type, GeneratorContext context)

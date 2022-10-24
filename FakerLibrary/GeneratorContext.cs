@@ -15,4 +15,9 @@ public class GeneratorContext
         Faker = faker;
         Random = random;
     }
+
+    public GeneratorContext()
+    {
+        Random = new Random();
+    }
 }
