@@ -70,5 +70,32 @@ namespace FakerTests
             Assert.IsNull(cyclingTestClass.testList[0]);
             Assert.IsNull(cyclingTestClass.innerObj);
         }
+
+        public class A
+        {
+            public int a; 
+        }
+        public class B
+        {
+            public A objA;
+            public int b;
+        }
+        public class C
+        {
+            public B objB;
+            public int c;
+        }
+
+        [TestMethod]
+        public void TestNestedClasses()
+        {
+            C objC = faker.Create<C>();
+            Assert.IsNotNull(objC);
+            Assert.IsNotNull(objC.c);
+            Assert.IsNotNull(objC.objB);
+            Assert.IsNotNull(objC.objB.b);
+            Assert.IsNotNull(objC.objB.objA);
+            Assert.IsNotNull(objC.objB.objA.a);
+        }
     }
 }
