@@ -55,8 +55,8 @@ public class Faker : IFaker
         {
             return null;
         }
-        //FillFields(obj);
-        //FillProps(obj);
+        FillFields(obj);
+        FillProps(obj);
         _typesBeingCreated.Remove(type);
         return obj;
     }
@@ -70,16 +70,32 @@ public class Faker : IFaker
             try
             {
                 return constructor.Invoke(constructor.GetParameters()
-                    .Select(info => GenerateMemberValue(type, info.Name, info.ParameterType)).ToArray());
+                    .Select(info => Create(info.ParameterType)).ToArray());
             }
             catch (Exception) { }
         }
         return GetDefaultValue(type);
     }
-
-    private object GenerateMemberValue(Type objectType, string memberName, Type memberType)
+    private void FillFields(object obj)
     {
-        return Create(memberType);
+        var fields = obj.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        foreach (var field in fields)
+        {
+            if (!field.IsInitOnly)
+                field.SetValue(obj, Create(field.FieldType));
+        }
+    }
+
+    private void FillProps(object obj)
+    {
+        var props = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        foreach (var prop in props)
+        {
+            if (prop.CanWrite)
+            {
+                prop.SetValue(obj, Create(prop.PropertyType));
+            }
+        }
     }
 
     private static object GetDefaultValue(Type t)
