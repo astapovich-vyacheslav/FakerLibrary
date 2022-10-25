@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using FakerLibrary.Generators;
 using FakerLibrary;
+//using NUnit.Framework;
 
 namespace FakerTests
 {
@@ -96,6 +97,44 @@ namespace FakerTests
             Assert.IsNotNull(objC.objB.b);
             Assert.IsNotNull(objC.objB.objA);
             Assert.IsNotNull(objC.objB.objA.a);
+        }
+
+        public class CoDependentClass1
+        {
+            public CoDependentClass2 cl2;
+
+            public CoDependentClass1(CoDependentClass2 cl2)
+            {
+                this.cl2 = cl2;
+            }
+            public CoDependentClass1() { }
+        }
+
+        public class CoDependentClass2
+        {
+            public CoDependentClass1 cl1;
+            public CoDependentClass2(CoDependentClass1 cl1)
+            {
+                this.cl1 = cl1;
+            }
+            public CoDependentClass2() { }
+        }
+
+        [TestMethod]
+
+        public void CoDependentClassesTest()
+        {
+            var cl1 = faker.Create<CoDependentClass1>();
+            var cl2 = faker.Create<CoDependentClass2>();
+
+            Assert.IsNotNull(cl1);
+            Assert.IsNotNull(cl2);
+
+            Assert.IsNotNull(cl1.cl2);
+            Assert.IsNotNull(cl2.cl1);
+
+            Assert.IsNull(cl1.cl2.cl1);
+            Assert.IsNull(cl2.cl1.cl2);
         }
     }
 }
