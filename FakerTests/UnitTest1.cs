@@ -8,6 +8,8 @@ namespace FakerTests
     [TestClass]
     public class UnitTest1
     {
+        Faker faker = new Faker();
+
         [TestMethod]
         public void ValueTypes()
         {
@@ -19,6 +21,37 @@ namespace FakerTests
                 boolGenerator.Generate(typeof(bool), generatorContext) is bool &&
                 integerGenerator.Generate(typeof(int), generatorContext) is int &&
                 doubleGenerator.Generate(typeof(double), generatorContext) is double);
+        }
+
+        //Class to test
+        public class TestClass
+        {
+            public int a;
+            public int b;
+            public int c;
+
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int Z { get; set; }
+
+            public TestClass(int a, int x)
+            {
+                this.a = a;
+                X = x;
+            }
+        }
+
+        [TestMethod]
+        public void CheckFieldsAndPropsFilling()
+        {
+            TestClass testObj = faker.Create<TestClass>();
+            Assert.IsNotNull(testObj);
+            Assert.IsNotNull(testObj.a);
+            Assert.IsNotNull(testObj.b);
+            Assert.IsNotNull(testObj.c);
+            Assert.IsNotNull(testObj.X);
+            Assert.IsNotNull(testObj.Y);
+            Assert.IsNotNull(testObj.Z);
         }
     }
 }
