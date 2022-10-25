@@ -53,5 +53,22 @@ namespace FakerTests
             Assert.IsNotNull(testObj.Y);
             Assert.IsNotNull(testObj.Z);
         }
+
+        public class CyclingTestClass : TestClass
+        {
+            public List<CyclingTestClass> testList;
+            public CyclingTestClass innerObj;
+            public CyclingTestClass(int a, int x) : base(a, x) { }
+        }
+
+        [TestMethod]
+        public void TestCyclingClass()
+        {
+            CyclingTestClass cyclingTestClass = faker.Create<CyclingTestClass>();
+            Assert.IsNotNull(cyclingTestClass);
+            Assert.IsNotNull(cyclingTestClass.testList);
+            Assert.IsNull(cyclingTestClass.testList[0]);
+            Assert.IsNull(cyclingTestClass.innerObj);
+        }
     }
 }

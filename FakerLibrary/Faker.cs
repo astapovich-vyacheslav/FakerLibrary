@@ -47,7 +47,7 @@ public class Faker : IFaker
         }
 
         if (_typesBeingCreated.Contains(type))
-            return GetDefaultValue(type);
+            return GetDefaultValue(type);                                      
 
         _typesBeingCreated.Add(type);
         var obj = CreateComplex(type);
