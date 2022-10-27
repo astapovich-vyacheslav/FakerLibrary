@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using FakerLibrary.Generators;
 using FakerLibrary;
-//using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace FakerTests
 {
@@ -17,11 +17,14 @@ namespace FakerTests
             GeneratorContext generatorContext = new GeneratorContext();
             BoolGenerator boolGenerator = new BoolGenerator();
             IntegerGenerator integerGenerator = new IntegerGenerator();
-            DoubleGenerator doubleGenerator = new DoubleGenerator();
-            Assert.IsTrue(boolGenerator.CanGenerate(typeof(bool)) && integerGenerator.CanGenerate(typeof(int)) && doubleGenerator.CanGenerate(typeof(double)) &&
-                boolGenerator.Generate(typeof(bool), generatorContext) is bool &&
-                integerGenerator.Generate(typeof(int), generatorContext) is int &&
-                doubleGenerator.Generate(typeof(double), generatorContext) is double);
+            StringGenerator stringGenerator = new StringGenerator();
+            bool condition = boolGenerator.CanGenerate(typeof(bool))
+                && integerGenerator.CanGenerate(typeof(int))
+                && stringGenerator.CanGenerate(typeof(string))
+                && boolGenerator.Generate(typeof(bool), generatorContext) is bool
+                && integerGenerator.Generate(typeof(int), generatorContext) is int
+                && stringGenerator.Generate(typeof(string), generatorContext) is string;
+            Assert.IsTrue(condition);
         }
 
         //Class to test
@@ -135,6 +138,16 @@ namespace FakerTests
 
             Assert.IsNull(cl1.cl2.cl1);
             Assert.IsNull(cl2.cl1.cl2);
+        }
+
+        [TestMethod]
+        public void DllTest()
+        {
+            double d = faker.Create<double>();
+            float f = faker.Create<float>();
+
+            Assert.IsNotNull(d);
+            Assert.IsNotNull(f);
         }
     }
 }

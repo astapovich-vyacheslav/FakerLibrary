@@ -1,4 +1,4 @@
-﻿namespace FakerLibrary.Generators;
+﻿namespace FakerLibrary;
 
 public class FloatGenerator : IGenerator
 {

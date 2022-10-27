@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace FakerLibrary;
-internal interface IGenerator
+public interface IGenerator
 {
     object Generate(Type type, GeneratorContext context);
     bool CanGenerate(Type type);

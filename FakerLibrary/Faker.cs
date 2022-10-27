@@ -25,10 +25,31 @@ public class Faker : IFaker
 
     private static List<IGenerator> GetGenerators()
     {
-        return Assembly.GetExecutingAssembly().GetTypes()
+        var result = Assembly.GetExecutingAssembly().GetTypes()
             .Where(t => t.GetInterfaces().Contains(typeof(IGenerator)))
             .Select(t => (IGenerator)Activator.CreateInstance(t)).ToList();
+        string[] allfiles = Directory.GetFiles("dlls");
+        foreach (string filename in allfiles)
+        {
+            try
+            {
+                Assembly asm = Assembly.LoadFrom(filename);
+                Type[] types = asm.GetTypes();
+                foreach (Type type in types)
+                {
+                    if (type.GetInterfaces().Contains(typeof(IGenerator)))
+                    {
+                        var asmList = (asm.GetTypes()
+                        .Where(t => t.GetInterfaces().Contains(typeof(IGenerator)))
+                        .Select(t => (IGenerator)Activator.CreateInstance(t)).ToList());
 
+                        result.AddRange(asmList);
+                    }
+                }
+            }
+            catch { }
+        }
+        return result;
     }
 
     public T Create<T>()
